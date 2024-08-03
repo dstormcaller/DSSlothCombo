@@ -40,7 +40,12 @@ namespace XIVSlothCombo.Combos.PvE
             NobleBlood = 36938,
             ReignOfBeasts = 36937,
             FatedBrand = 36936,
-            LightningShot = 16143;
+            LightningShot = 16143,
+            Reprisal = 7535,
+            Camouflage = 16140,
+            Nebula = 16148,
+            Rampart = 7531,
+            ArmsLength = 7548;
 
         public static class Buffs
         {
@@ -53,7 +58,8 @@ namespace XIVSlothCombo.Combos.PvE
                 ReadyToRaze = 3839,
                 ReadyToBreak = 3886,
                 ReadyToReign = 3840,
-                ReadyToBlast = 2686;
+                ReadyToBlast = 2686,
+                HeartOfLight = 1821;
         }
 
         public static class Debuffs
@@ -595,8 +601,42 @@ namespace XIVSlothCombo.Combos.PvE
             {
                 if (actionID is Aurora)
                 {
+                    if (!LevelChecked(Aurora))
+                        return ArmsLength;
                     if ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora)))
-                        return OriginalHook(11);
+                        return ArmsLength;
+                }
+                return actionID;
+            }
+        }
+        internal class GNB_ReprisalHeartFeature : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_ReprisalHeartFeature;
+
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            {
+                if (actionID is Reprisal)
+                {
+                    if (TargetHasEffectAny(Debuffs.Reprisal) && IsOffCooldown(Reprisal))
+                        return HeartOfLight;
+                    if (IsOnCooldown(Reprisal) && ActionReady(HeartOfLight) && !HasEffectAny(Buffs.HeartOfLight))
+                        return HeartOfLight;
+                }
+                return actionID;
+            }
+        }
+        internal class GNB_StraightMitigationFeature : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_StraightMitigationFeature;
+
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            {
+                if (actionID is Camouflage)
+                {
+                    if (ActionReady(Nebula))
+                        return Nebula;
+                    if (ActionReady(Rampart))
+                        return Rampart;
                 }
                 return actionID;
             }
