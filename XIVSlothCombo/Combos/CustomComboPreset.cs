@@ -1614,10 +1614,14 @@ namespace XIVSlothCombo.Combos
 
         [CustomComboInfo("Reprisal to Heart of Light Feature", "Replaces Reprisal with Heart of Light both on cooldown and when Reprisal debuff already present. Also protects from double Heart of Light.", GNB.JobID)]
         [ConflictingCombos(ALL_Tank_Reprisal)]
-        GNB_ReprisalHeartFeature = 7698,
+        GNB_ReprisalHeartFeature = 7690,
 
         [CustomComboInfo("Straight Mitigation Feature", "Replaces Camouflage with Nebula>Rampart>Camouflage.", GNB.JobID)]
-        GNB_StraightMitigationFeature = 7699,
+        GNB_StraightMitigationFeature = 7691,
+
+        [ParentCombo(GNB_StraightMitigationFeature)]
+        [CustomComboInfo("Heart of Stone/Corundum Option", "Adds Heart of Stone/Corundum between Nebula and Rampart, if buff is not already present from another GNB.", GNB.JobID)]
+        GNB_StraightMitigationFeature_HoC = 7692,
 
         // Last value = 7700
 

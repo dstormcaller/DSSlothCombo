@@ -45,7 +45,8 @@ namespace XIVSlothCombo.Combos.PvE
             Camouflage = 16140,
             Nebula = 16148,
             Rampart = 7531,
-            ArmsLength = 7548;
+            ArmsLength = 7548,
+            HeartOfCorundum = 25758;
 
         public static class Buffs
         {
@@ -59,7 +60,10 @@ namespace XIVSlothCombo.Combos.PvE
                 ReadyToBreak = 3886,
                 ReadyToReign = 3840,
                 ReadyToBlast = 2686,
-                HeartOfLight = 1821;
+                HeartOfLight = 1821,
+                HeartOfStone = 1816,
+                HeartOfCorundum = 1831,
+                Catharsis = 1832;
         }
 
         public static class Debuffs
@@ -604,7 +608,7 @@ namespace XIVSlothCombo.Combos.PvE
                 {
                     if (!LevelChecked(Aurora))
                         return ArmsLength;
-                    if ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora)))
+                    if (((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && ActionReady(ArmsLength))
                         return ArmsLength;
                 }
                 return actionID;
@@ -636,8 +640,12 @@ namespace XIVSlothCombo.Combos.PvE
                 {
                     if (ActionReady(Nebula))
                         return Nebula;
+                    if (IsEnabled(CustomComboPreset.GNB_StraightMitigationFeature_HoC) && ActionReady(HeartOfCorundum) && !HasEffectAny(Buffs.HeartOfCorundum) && !HasEffectAny(Buffs.HeartOfStone))
+                        return HeartOfCorundum;
                     if (ActionReady(Rampart))
                         return Rampart;
+                    if (IsEnabled(CustomComboPreset.GNB_StraightMitigationFeature_HoC) && !ActionReady(Rampart) && !ActionReady(Camouflage))
+                        return HeartOfCorundum;
                 }
                 return actionID;
             }
