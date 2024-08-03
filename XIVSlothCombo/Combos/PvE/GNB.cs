@@ -66,7 +66,8 @@ namespace XIVSlothCombo.Combos.PvE
         {
             public const ushort
                 BowShock = 1838,
-                SonicBreak = 1837;
+                SonicBreak = 1837,
+                Reprisal = 1193;
         }
 
         public static class Config
@@ -617,8 +618,10 @@ namespace XIVSlothCombo.Combos.PvE
             {
                 if (actionID is Reprisal)
                 {
-                    if (IsOnCooldown(Reprisal) && ActionReady(HeartOfLight) && !HasEffectAny(Buffs.HeartOfLight))
+                    if ((TargetHasEffectAny(Debuffs.Reprisal) && !HasEffectAny(Buffs.HeartOfLight)) || (IsOnCooldown(Reprisal) && ActionReady(HeartOfLight)))
                         return HeartOfLight;
+                    if (TargetHasEffectAny(Debuffs.Reprisal) && HasEffectAny(Buffs.HeartOfLight))
+                        return OriginalHook(11);
                 }
                 return actionID;
             }

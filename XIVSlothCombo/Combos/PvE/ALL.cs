@@ -118,7 +118,7 @@ namespace XIVSlothCombo.Combos.PvE
             {
                 if (actionID is Reprisal)
                 {
-                    if (TargetHasEffectAny(Debuffs.Reprisal) && IsOffCooldown(Reprisal) && ActionReady(GNB.HeartOfLight))
+                    if (TargetHasEffectAny(Debuffs.Reprisal))
                         return GNB.HeartOfLight;
                     if (TargetHasEffectAny(Debuffs.Reprisal) && IsOffCooldown(Reprisal))
                         return OriginalHook(11);

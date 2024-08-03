@@ -98,6 +98,7 @@ namespace XIVSlothCombo.Combos
         ALL_Tank_Interrupt = 100000,
 
         [ReplaceSkill(All.Reprisal)]
+        [ConflictingCombos(GNB_ReprisalHeartFeature)]
         [ParentCombo(ALL_Tank_Menu)]
         [CustomComboInfo("Tank: Double Reprisal Protection", "Prevents the use of Reprisal when target already has the effect by replacing it with Stone, or Heart of Light for GNB.", ADV.JobID)]
         ALL_Tank_Reprisal = 100001,
@@ -1611,7 +1612,8 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Ultimatum Option", "Use Variant Ultimatum on cooldown.", GNB.JobID)]
         GNB_Variant_Ultimatum = 7035,
 
-        [CustomComboInfo("Reprisal to Heart of Light Feature", "Replaces Reprisal with Heart of Light when on cooldown if Heart of Light buff is not present, or when Reprisal debuff is already on target.", GNB.JobID)]
+        [CustomComboInfo("Reprisal to Heart of Light Feature", "Replaces Reprisal with Heart of Light both on cooldown and when Reprisal debuff already present. Also protects from double Heart of Light.", GNB.JobID)]
+        [ConflictingCombos(ALL_Tank_Reprisal)]
         GNB_ReprisalHeartFeature = 7698,
 
         [CustomComboInfo("Straight Mitigation Feature", "Replaces Camouflage with Nebula>Rampart>Camouflage.", GNB.JobID)]
