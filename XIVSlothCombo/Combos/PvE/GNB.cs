@@ -617,8 +617,6 @@ namespace XIVSlothCombo.Combos.PvE
             {
                 if (actionID is Reprisal)
                 {
-                    if (TargetHasEffectAny(Debuffs.Reprisal) && IsOffCooldown(Reprisal))
-                        return HeartOfLight;
                     if (IsOnCooldown(Reprisal) && ActionReady(HeartOfLight) && !HasEffectAny(Buffs.HeartOfLight))
                         return HeartOfLight;
                 }
