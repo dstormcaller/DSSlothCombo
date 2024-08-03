@@ -66,7 +66,8 @@ namespace XIVSlothCombo.Combos.PvE
         {
             public const ushort
                 BowShock = 1838,
-                SonicBreak = 1837;
+                SonicBreak = 1837,
+                Reprisal = 1193;
         }
 
         public static class Config
