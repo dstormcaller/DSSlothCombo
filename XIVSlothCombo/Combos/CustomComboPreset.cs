@@ -99,7 +99,7 @@ namespace XIVSlothCombo.Combos
 
         [ReplaceSkill(All.Reprisal)]
         [ParentCombo(ALL_Tank_Menu)]
-        [CustomComboInfo("Tank: Double Reprisal Protection", "Prevents the use of Reprisal when target already has the effect by replacing it with Stone.", ADV.JobID)]
+        [CustomComboInfo("Tank: Double Reprisal Protection", "Prevents the use of Reprisal when target already has the effect by replacing it with Stone, or Heart of Light for GNB.", ADV.JobID)]
         ALL_Tank_Reprisal = 100001,
         #endregion
 
@@ -1593,7 +1593,7 @@ namespace XIVSlothCombo.Combos
         GNB_NoMercy_Cooldowns_SonicBreakBowShock = 7502,
         #endregion
 
-        [CustomComboInfo("Aurora Protection Feature", "Locks out Aurora if Aurora's effect is on the target.", GNB.JobID, 0, "", "")]
+        [CustomComboInfo("Aurora to Arms Length Feature", "Replaces Aurora with Arms Length if Aurora is active on you or the target.", GNB.JobID, 0, "", "")]
         GNB_AuroraProtection = 7700,
 
         [Variant]
@@ -1610,6 +1610,12 @@ namespace XIVSlothCombo.Combos
         [VariantParent(GNB_ST_MainCombo, GNB_AoE_MainCombo)]
         [CustomComboInfo("Ultimatum Option", "Use Variant Ultimatum on cooldown.", GNB.JobID)]
         GNB_Variant_Ultimatum = 7035,
+
+        [CustomComboInfo("Reprisal to Heart of Light Feature", "Replaces Reprisal with Heart of Light when on cooldown if Heart of Light buff is not present, or when Reprisal debuff is already on target.", GNB.JobID)]
+        GNB_ReprisalHeartFeature = 7698,
+
+        [CustomComboInfo("Straight Mitigation Feature", "Replaces Camouflage with Nebula>Rampart>Camouflage.", GNB.JobID)]
+        GNB_StraightMitigationFeature = 7699,
 
         // Last value = 7700
 
