@@ -46,7 +46,8 @@ namespace XIVSlothCombo.Combos.PvE
             Nebula = 16148,
             Rampart = 7531,
             ArmsLength = 7548,
-            HeartOfCorundum = 25758;
+            HeartOfCorundum = 25758,
+            GreatNebula = 36935;
 
         public static class Buffs
         {
@@ -739,8 +740,10 @@ namespace XIVSlothCombo.Combos.PvE
             {
                 if (actionID is Camouflage)
                 {
-                    if (ActionReady(Nebula))
+                    if (!LevelChecked(GreatNebula) && ActionReady(Nebula))
                         return Nebula;
+                    if (ActionReady(GreatNebula))
+                        return GreatNebula;
                     if (IsEnabled(CustomComboPreset.GNB_StraightMitigationFeature_HoC) && ActionReady(HeartOfCorundum) && !HasEffectAny(Buffs.HeartOfCorundum) && !HasEffectAny(Buffs.HeartOfStone))
                         return HeartOfCorundum;
                     if (ActionReady(Rampart))
