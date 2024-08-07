@@ -3,6 +3,8 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVSlothCombo.CustomComboNS.Functions;
 
 using ECommons.DalamudServices;
+using FFXIVClientStructs.FFXIV.Component.GUI;
+using XIVSlothCombo.Services;
 
 namespace XIVSlothCombo.CustomComboNS
 {
@@ -63,5 +65,18 @@ namespace XIVSlothCombo.CustomComboNS
         // This does NOT replace the action on the hotbar. The item is just...used so the conditions must be quite strict, but it works.
 
         #endregion
+
+        #region Limit Break
+        // Not much else to say. Gets called like if (HasPVPLimitBreak()) return MarksmanSpite;
+        // Ofc, additional conditions as required, no guard, no full on HP.
+        public unsafe bool HasPVPLimitBreak()
+        {
+            AtkUnitBase* LBWidget = (AtkUnitBase*)Svc.GameGui.GetAddonByName("_LimitBreak", 1);
+            if (LBWidget->UldManager.SearchNodeById(6)->GetComponent()->UldManager.SearchNodeById(3)->Width >= 146)
+                return true;
+            return false;
+        }
+        #endregion
+
     }
 }
