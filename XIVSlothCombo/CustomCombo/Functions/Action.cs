@@ -1,5 +1,8 @@
-﻿using FFXIVClientStructs.FFXIV.Client.Game;
+﻿using Dalamud.Game.ClientState.Keys;
+using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Common.Lua;
 using System.Linq;
+using System.Runtime.InteropServices;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
 
@@ -186,8 +189,8 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// <param name="actionID"> Action ID to check. </param>
         /// <param name="weaveTime"> Time when weaving window is over. Defaults to 0.7. </param>
         /// <returns> True or false. </returns>
-        public static bool CanWeave(uint actionID, double weaveTime = 0.7) => (GetCooldown(actionID).CooldownRemaining > weaveTime) || (HasSilence() && HasPacification());
-
+        //public static bool CanWeave(uint actionID, double weaveTime = 0.7) => (GetCooldown(actionID).CooldownRemaining > weaveTime) || (HasSilence() && HasPacification());
+        public static bool CanWeave(uint actionID, double weaveTime = 0.7) => !ModifierKey(VirtualKey.MENU) && ((GetCooldown(actionID).CooldownRemaining > weaveTime) || (HasSilence() && HasPacification()));
         /// <summary> Checks if the provided actionID has enough cooldown remaining to weave against it without causing clipping and checks if you're casting a spell. </summary>
         /// <param name="actionID"> Action ID to check. </param>
         /// <param name="weaveTime"> Time when weaving window is over. Defaults to 0.6. </param>
@@ -196,7 +199,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         {
             float castTimeRemaining = LocalPlayer.TotalCastTime - LocalPlayer.CurrentCastTime;
 
-            if (GetCooldown(actionID).CooldownRemaining > weaveTime &&                          // Prevent GCD delay
+            if (!ModifierKey(VirtualKey.MENU) && GetCooldown(actionID).CooldownRemaining > weaveTime &&                          // Prevent GCD delay
                 castTimeRemaining <= 0.5 &&                                                     // Show in last 0.5sec of cast so game can queue ability
                 GetCooldown(actionID).CooldownRemaining - castTimeRemaining - weaveTime >= 0)   // Don't show if spell is still casting in weave window
                 return true;
@@ -208,7 +211,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// <param name="start"> Time (in seconds) to start to check for the weave window. </param>
         /// <param name="end"> Time (in seconds) to end the check for the weave window. </param>
         /// <returns> True or false. </returns>
-        public static bool CanDelayedWeave(uint actionID, double start = 1.25, double end = 0.6) => GetCooldown(actionID).CooldownRemaining <= start && GetCooldown(actionID).CooldownRemaining >= end;
+        public static bool CanDelayedWeave(uint actionID, double start = 1.25, double end = 0.6) => !ModifierKey(VirtualKey.MENU) && GetCooldown(actionID).CooldownRemaining <= start && GetCooldown(actionID).CooldownRemaining >= end;
 
         /// <summary>
         /// Returns the current combo timer.
@@ -219,5 +222,21 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// Returns the last combo action.
         /// </summary>
         public unsafe static uint ComboAction => ActionManager.Instance()->Combo.Action;
+
+
+        #region Modifier Key
+        
+        // I am not entirely happy with how this is wired in BUT it works quite well with tiny exceptions.
+        // (obviously the skills that do not have any of the canweave() variants won't be saved.
+        // For those we'd need to add the actual !ModifierKey(VirtualKey.MENU) onto the oGCD. 
+        // Also, people might not be happy with ALT being the modifier key. Having it configurable would be neat but that's homework for someone else
+        public static bool ModifierKey(VirtualKey vk)
+        {
+            return (GetKeyState((int)vk) & 0x8000) == 0x8000;
+        }
+        [LibraryImport("user32.dll")]
+        public static partial short GetKeyState(int keyCode);
+        #endregion
+
     }
 }
