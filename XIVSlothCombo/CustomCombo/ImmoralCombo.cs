@@ -1,23 +1,7 @@
-﻿using Dalamud.Game.ClientState.Keys;
-using Dalamud.Game.ClientState.Objects.Enums;
-using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Game.ClientState.Party;
-using FFXIVClientStructs.FFXIV.Component.GUI;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System;
-using XIVSlothCombo.Services;
+﻿using Dalamud.Game.ClientState.Objects.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVSlothCombo.CustomComboNS.Functions;
-using XIVSlothCombo.Combos.PvE;
-using System.Runtime.InteropServices;
-using XIVSlothCombo.Combos.PvP;
-using XIVSlothCombo.Core;
-using XIVSlothCombo.Combos;
-using System.Diagnostics;
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using FFXIVClientStructs.FFXIV.Client.Game.Character;
+
 using ECommons.DalamudServices;
 
 namespace XIVSlothCombo.CustomComboNS
@@ -59,6 +43,25 @@ namespace XIVSlothCombo.CustomComboNS
 
             return rank != null && EnemyHealthMaxHp() >= maxHealth * 11 && (rank.Rank == 2);
         }
+        #endregion
+
+        #region Item Usage
+        public unsafe void UseItem(uint itemId)
+        {
+            FFXIVClientStructs.FFXIV.Client.Game.ActionManager.Instance()->UseAction(FFXIVClientStructs.FFXIV.Client.Game.ActionType.Item, itemId, 0xE0000000, 65535, 0, 0, null);
+        }
+        #endregion
+        #region Can use potion
+        public unsafe static bool CanUse()
+        {
+            var PotionCDGroup = 68;
+            bool canpot = ActionManager.Instance()->GetRecastGroupDetail(PotionCDGroup)->IsActive == 0;
+            return canpot;
+        }
+        // Execution can be called with something like this if (CanUse()) UseItem(1038956); 
+        // that's the code for a HQ Hyper-Potion. 
+        // This does NOT replace the action on the hotbar. The item is just...used so the conditions must be quite strict, but it works.
+
         #endregion
     }
 }
