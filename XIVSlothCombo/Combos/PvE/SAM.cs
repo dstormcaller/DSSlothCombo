@@ -97,13 +97,25 @@ namespace XIVSlothCombo.Combos.PvE
                 SAM_STBloodbathThreshold = new("SAM_STBloodbathThreshold", 40),
                 SAM_AoESecondWindThreshold = new("SAM_AoESecondWindThreshold", 25),
                 SAM_AoEBloodbathThreshold = new("SAM_AoEBloodbathThreshold", 40),
+                SAM_Kasha_KenkiOvercapAmount = new(nameof(SAM_Kasha_KenkiOvercapAmount), 50),
+                SAM_Yukaze_KenkiOvercapAmount = new(nameof(SAM_Yukaze_KenkiOvercapAmount), 50),
+                SAM_Gekko_KenkiOvercapAmount = new(nameof(SAM_Gekko_KenkiOvercapAmount), 50),
+                SAM_Oka_KenkiOvercapAmount = new(nameof(SAM_Oka_KenkiOvercapAmount), 50),
+                SAM_Mangetsu_KenkiOvercapAmount = new(nameof(SAM_Mangetsu_KenkiOvercapAmount), 50),
+                SAM_ST_KenkiOvercapAmount = new(nameof(SAM_ST_KenkiOvercapAmount), 50),
+                SAM_AoE_KenkiOvercapAmount = new(nameof(SAM_AoE_KenkiOvercapAmount), 50),
                 SAM_VariantCure = new("SAM_VariantCure");
 
             public static UserFloat
                 SAM_ST_Higanbana_Threshold = new("SAM_ST_Higanbana_Threshold", 1),
-                SAM_ST_KenkiOvercapAmount = new("SamKenkiOvercapAmount", 50),
-                SAM_AoE_KenkiOvercapAmount = new("SamAOEKenkiOvercapAmount", 50),
                  SAM_ST_ExecuteThreshold = new("SAM_ST_ExecuteThreshold", 1);
+
+            public static UserBool
+                SAM_Kasha_KenkiOvercap = new(nameof(SAM_Kasha_KenkiOvercap)),
+                SAM_Yukaze_KenkiOvercap = new(nameof(SAM_Yukaze_KenkiOvercap)),
+                SAM_Gekko_KenkiOvercap = new(nameof(SAM_Gekko_KenkiOvercap)),
+                SAM_Oka_KenkiOvercap = new(nameof(SAM_Oka_KenkiOvercap)),
+                SAM_Mangetsu_KenkiOvercap = new(nameof(SAM_Mangetsu_KenkiOvercap));
         }
         internal class SAM_ST_YukikazeCombo : CustomCombo
         {
@@ -112,25 +124,21 @@ namespace XIVSlothCombo.Combos.PvE
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
                 SAMGauge? gauge = GetJobGauge<SAMGauge>();
-                float SamKenkiOvercapAmount = Config.SAM_ST_KenkiOvercapAmount;
 
                 if (actionID is Yukikaze)
                 {
-                    if (CanWeave(actionID))
-                    {
-                        if (gauge.Kenki >= SamKenkiOvercapAmount && LevelChecked(Shinten))
-                            return Shinten;
-                    }
+                    if (Config.SAM_Yukaze_KenkiOvercap && CanWeave(actionID) && gauge.Kenki >= Config.SAM_Yukaze_KenkiOvercapAmount && LevelChecked(Shinten))
+                        return OriginalHook(Shinten);
 
                     if (HasEffect(Buffs.MeikyoShisui) && LevelChecked(Yukikaze))
-                        return Yukikaze;
+                        return OriginalHook(Yukikaze);
 
                     if (comboTime > 0)
                     {
-                        if (lastComboMove is Hakaze && LevelChecked(Yukikaze))
-                            return Yukikaze;
+                        if (lastComboMove == OriginalHook(Hakaze) && LevelChecked(Yukikaze))
+                            return OriginalHook(Yukikaze);
                     }
-                    return Hakaze;
+                    return OriginalHook(Hakaze);
                 }
                 return actionID;
             }
@@ -143,27 +151,54 @@ namespace XIVSlothCombo.Combos.PvE
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte levels)
             {
                 SAMGauge? gauge = GetJobGauge<SAMGauge>();
-                float SamKenkiOvercapAmount = Config.SAM_ST_KenkiOvercapAmount;
 
                 if (actionID is Kasha)
                 {
-                    if (CanWeave(actionID))
-                    {
-                        if (gauge.Kenki >= SamKenkiOvercapAmount && LevelChecked(Shinten))
-                            return Shinten;
-                    }
+                    if (Config.SAM_Kasha_KenkiOvercap && CanWeave(actionID) && gauge.Kenki >= Config.SAM_Kasha_KenkiOvercapAmount && LevelChecked(Shinten))
+                        return OriginalHook(Shinten);
+
                     if (HasEffect(Buffs.MeikyoShisui))
-                        return Kasha;
+                        return OriginalHook(Kasha);
 
                     if (comboTime > 0)
                     {
-                        if (lastComboMove is Hakaze && LevelChecked(Shifu))
-                            return Shifu;
+                        if (lastComboMove == OriginalHook(Hakaze) && LevelChecked(Shifu))
+                            return OriginalHook(Shifu);
 
                         if (lastComboMove is Shifu && LevelChecked(Kasha))
-                            return Kasha;
+                            return OriginalHook(Kasha);
                     }
-                    return Hakaze;
+                    return OriginalHook(Hakaze);
+                }
+                return actionID;
+            }
+        }
+
+        internal class SAM_ST_GeckoCombo : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SAM_ST_GekkoCombo;
+
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte levels)
+            {
+                SAMGauge? gauge = GetJobGauge<SAMGauge>();
+
+                if (actionID is Gekko)
+                {
+                    if (Config.SAM_Gekko_KenkiOvercap && CanWeave(actionID) && gauge.Kenki >= Config.SAM_Gekko_KenkiOvercapAmount && LevelChecked(Shinten))
+                        return OriginalHook(Shinten);
+
+                    if (HasEffect(Buffs.MeikyoShisui))
+                        return OriginalHook(Gekko);
+
+                    if (comboTime > 0)
+                    {
+                        if (lastComboMove == OriginalHook(Hakaze) && LevelChecked(Jinpu))
+                            return OriginalHook(Jinpu);
+
+                        if (lastComboMove is Jinpu && LevelChecked(Gekko))
+                            return OriginalHook(Gekko);
+                    }
+                    return OriginalHook(Hakaze);
                 }
                 return actionID;
             }
@@ -184,7 +219,7 @@ namespace XIVSlothCombo.Combos.PvE
                 bool trueNorthReady = TargetNeedsPositionals() && ActionReady(All.TrueNorth) && !HasEffect(All.Buffs.TrueNorth) && CanDelayedWeave(actionID);
                 float meikyostacks = GetBuffStacks(Buffs.MeikyoShisui);
 
-                if (actionID is Gekko)
+                if (actionID is Hakaze or Gyofu)
                 {
                     if (IsEnabled(CustomComboPreset.SAM_Variant_Cure) &&
                         IsEnabled(Variant.VariantCure) &&
@@ -371,12 +406,12 @@ namespace XIVSlothCombo.Combos.PvE
                 bool threeSeal = OriginalHook(Iaijutsu) is MidareSetsugekka or TendoSetsugekka;
                 float enemyHP = GetTargetHPPercent();
                 bool trueNorthReady = TargetNeedsPositionals() && ActionReady(All.TrueNorth) && !HasEffect(All.Buffs.TrueNorth) && CanDelayedWeave(actionID);
-                float kenkiOvercap = Config.SAM_ST_KenkiOvercapAmount;
+                int kenkiOvercap = Config.SAM_ST_KenkiOvercapAmount;
                 float shintenTreshhold = Config.SAM_ST_ExecuteThreshold;
                 float HiganbanaThreshold = Config.SAM_ST_Higanbana_Threshold;
                 float meikyostacks = GetBuffStacks(Buffs.MeikyoShisui);
 
-                if (actionID is Gekko)
+                if (actionID is Hakaze or Gyofu)
                 {
                     if (IsEnabled(CustomComboPreset.SAM_Variant_Cure) &&
                         IsEnabled(Variant.VariantCure) &&
@@ -589,67 +624,43 @@ namespace XIVSlothCombo.Combos.PvE
 
                 if (actionID is Oka)
                 {
-                    if (IsNotEnabled(CustomComboPreset.SAM_AoE_OkaCombo_TwoTarget) &&
-                        gauge.Kenki >= Config.SAM_AoE_KenkiOvercapAmount && LevelChecked(Kyuten) && CanWeave(actionID))
+                    if (Config.SAM_Oka_KenkiOvercap && gauge.Kenki >= Config.SAM_Oka_KenkiOvercapAmount && LevelChecked(Kyuten) && CanWeave(actionID))
                         return Kyuten;
 
-                    if (IsNotEnabled(CustomComboPreset.SAM_AoE_OkaCombo_TwoTarget) &&
-                        HasEffect(Buffs.MeikyoShisui))
+                    if (HasEffect(Buffs.MeikyoShisui))
                         return Oka;
-
-                    //Two Target Rotation
-                    if (IsEnabled(CustomComboPreset.SAM_AoE_OkaCombo_TwoTarget))
-                    {
-                        if (CanWeave(actionID))
-                        {
-                            if (!HasEffect(Buffs.MeikyoShisui) && ActionReady(MeikyoShisui))
-                                return MeikyoShisui;
-
-                            if (ActionReady(Senei) && gauge.Kenki >= 25)
-                                return Senei;
-
-                            if (LevelChecked(Shinten) && gauge.Kenki >= 25)
-                                return Shinten;
-
-                            if (LevelChecked(Shoha) && gauge.MeditationStacks is 3)
-                                return Shoha;
-                        }
-
-                        if (HasEffect(Buffs.MeikyoShisui))
-                        {
-                            if (!gauge.Sen.HasFlag(Sen.SETSU) && Yukikaze.LevelChecked())
-                                return Yukikaze;
-
-                            if (!gauge.Sen.HasFlag(Sen.GETSU) && Gekko.LevelChecked())
-                                return Gekko;
-
-                            if (!gauge.Sen.HasFlag(Sen.KA) && Kasha.LevelChecked())
-                                return Kasha;
-                        }
-
-                        if (ActionReady(TsubameGaeshi) && gauge.Kaeshi is Kaeshi.SETSUGEKKA)
-                            return OriginalHook(TsubameGaeshi);
-
-                        if (LevelChecked(MidareSetsugekka) && OriginalHook(Iaijutsu) is MidareSetsugekka)
-                            return OriginalHook(Iaijutsu);
-
-                        if (comboTime > 1f)
-                        {
-                            if (lastComboMove is Hakaze && LevelChecked(Yukikaze))
-                                return Yukikaze;
-
-                            if (lastComboMove is Fuko or Fuga && !gauge.Sen.HasFlag(Sen.GETSU) && LevelChecked(Mangetsu))
-                                return Mangetsu;
-                        }
-
-                        if (!gauge.Sen.HasFlag(Sen.SETSU))
-                            return Hakaze;
-                    }
 
                     if (comboTime > 0 && LevelChecked(Oka))
                     {
-                        if (lastComboMove is Fuko || lastComboMove is Fuga)
+                        if (lastComboMove == OriginalHook(Fuko))
                             return Oka;
+                    }
+                    return OriginalHook(Fuko);
+                }
+                return actionID;
+            }
+        }
+
+        internal class SAM_AoE_MangetsuCombo : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SAM_AoE_MangetsuCombo;
+
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            {
+                SAMGauge? gauge = GetJobGauge<SAMGauge>();
+
+                if (actionID is Mangetsu)
+                {
+                    if (Config.SAM_Mangetsu_KenkiOvercap && gauge.Kenki >= Config.SAM_Mangetsu_KenkiOvercapAmount && LevelChecked(Kyuten) && CanWeave(actionID))
+                        return Kyuten;
+
+                    if (HasEffect(Buffs.MeikyoShisui))
+                        return Mangetsu;
+
+                    if (comboTime > 0 && LevelChecked(Mangetsu))
+                    {
+                        if (lastComboMove == OriginalHook(Fuko))
+                            return Mangetsu;
                     }
                     return OriginalHook(Fuko);
                 }
