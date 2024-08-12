@@ -1719,7 +1719,7 @@ namespace XIVSlothCombo.Combos
         GNB_FC_DoubleDown = 7603,
         #endregion
 
-        [CustomComboInfo("Aurora Protection Feature", "Locks out Aurora if Aurora's effect is on the target.", GNB.JobID, 0, "", "")]
+        [CustomComboInfo("Aurora to Arms Length Feature", "Replaces Aurora with Arms Length if Aurora is active on you or the target.", GNB.JobID, 0, "", "")]
         GNB_AuroraProtection = 7700,
 
         [Variant]
@@ -1736,6 +1736,17 @@ namespace XIVSlothCombo.Combos
         [VariantParent(GNB_ST_Advanced, GNB_AoE_Advanced)]
         [CustomComboInfo("Ultimatum Option", "Use Variant Ultimatum on cooldown.", GNB.JobID)]
         GNB_Variant_Ultimatum = 7035,
+        
+        [CustomComboInfo("Reprisal to Heart of Light Feature", "Replaces Reprisal with Heart of Light both on cooldown and when Reprisal debuff already present. Also protects from double Heart of Light.", GNB.JobID)]
+        [ConflictingCombos(ALL_Tank_Reprisal)]
+        GNB_ReprisalHeartFeature = 7690,
+
+        [CustomComboInfo("Straight Mitigation Feature", "Replaces Camouflage with Nebula>Rampart>Camouflage.", GNB.JobID)]
+        GNB_StraightMitigationFeature = 7691,
+
+        [ParentCombo(GNB_StraightMitigationFeature)]
+        [CustomComboInfo("Heart of Stone/Corundum Option", "Adds Heart of Stone/Corundum between Nebula and Rampart, if buff is not already present from another GNB.", GNB.JobID)]
+        GNB_StraightMitigationFeature_HoC = 7692,
         #endregion
 
         #region MACHINIST
